@@ -1,0 +1,54 @@
+{
+  "name": "webservice-template",
+  "version": "1.0.0",
+  "description": "Template of a webservice in NodeJS based on documentation and in the excellent book on NodeJS by Waldemar Neto",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node server-cluster.js",
+    "test:integration": "NODE_ENV=test mocha --opts test/integration/mocha.opts test/integration/**/*_spec.js",
+    "test:unit": "NODE_ENV=test mocha --opts test/unit/mocha.opts test/unit/**/*_spec.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Icaro Tavares",
+  "contributors": [
+    {
+      "name": "Waldemar Neto",
+      "url": "http://walde.co/",
+      "email": "waldemarnt@gmail.com"
+    },
+    {
+      "name": "ExpressJS",
+      "url": "https://expressjs.com/"
+    },
+    {
+      "name": "Christoph Tavan",
+      "url": "https://github.com/ctavan/"
+    },
+    {
+      "name": "Cursos Alura",
+      "url": "https://www.alura.com.br/"
+    },
+    {
+      "name": "Stackoverflow",
+      "url": "http://stackoverflow.com/"
+    }
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.3.2",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "sinon": "^2.1.0",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-validator": "^3.2.0",
+    "helmet": "^3.6.0",
+    "memjs": "^0.10.2",
+    "morgan": "^1.8.1",
+    "mysql": "^2.13.0"
+  }
+}
