@@ -15,11 +15,11 @@ class ProductsController {
 	getAll(req, res) {
 		var connection = mysql();
 		var productDao = new ProductDao(connection);
-		productDao.getAll((err, results) => {
-			if(err) res.status(400).send(err);
-			res.send(results);
-		});
-		
+
+		productDao.getAll()
+			.then(rows => res.send(rows))
+			.catch(err => res.status(400).send(err))
+
 		return connection.end();
 	}
 
@@ -31,11 +31,9 @@ class ProductsController {
 		var connection = mysql();
 		var productDao = new ProductDao(connection);
 
-		productDao.findById(productId, (err, result) => {
-			if(err) res.status(400).send(err);
-
-			res.send(result);
-		});
+		productDao.findById(productId)
+			.then(row => res.send(row))
+			.catch(err => res.status(400).send(err))
 
 		return connection.end();
 	}
@@ -46,10 +44,8 @@ class ProductsController {
 		req.checkBody('price', 'Price is empty').notEmpty().withMessage('Invalid price, must be a decimal').isFloat();
 
 		req.getValidationResult().then(result => {
-			if(!result.isEmpty()) {
-				res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
-      			return;
-			}
+			if(!result.isEmpty())
+				return res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
 		})
 
 		req.sanitizeBody('name').trim();
@@ -60,33 +56,36 @@ class ProductsController {
 		var connection = mysql();
 		var productDao = new ProductDao(connection);
 
-		productDao.save(product, (err, results) => {
-			if(err) res.status(400).send(err);
+		productDao.save(product)
+			.then(row => {
+				product.id = row.insertId;
 
-			product.id = results.insertId;
-
-			var response = {
+				var response = {
 		        	'product': product,
 		          	links: [
 		            	{
-		              	href:`${req.originalUrl}${results.insertId}`,
+		            		href:`${req.originalUrl}${product.id}`,
+			              	rel:"read",
+			              	method:"GET"
+		            	},
+		            	{
+		              	href:`${req.originalUrl}${product.id}`,
 			              	rel:"update",
 			              	method:"PUT"
 		            	},
 		            	{
-		              	href:`${req.originalUrl}${results.insertId}`,
+		              	href:`${req.originalUrl}${product.id}`,
 			              	rel:"delete",
 			              	method:"DELETE"
 		            	}
 		          	]
 		        }
 
-			res.location('/products/' + results.insertId);
-
-			// this.memjsClient.set(results.insertId, results, {expires: 60000}, (err, val) => {})
-
-			res.status(201).send(response);
-		});
+		        res.location('/products/' + product.id);
+				// this.memjsClient.set(product.id, row, {expires: 60000}, (err, val) => {})
+		        res.status(201).send(response);
+			})
+			.catch(err => res.status(400).send(err));
 
 		return connection.end();
 	}
@@ -100,13 +99,12 @@ class ProductsController {
 		var connection = mysql();
 		var productDao = new ProductDao(connection);
 
-		productDao.update(product, (err, results) => {
-			if(err) res.status(400).send(err);
-
-			// this.memjsClient.set(product.id, product, {expires: 60000}, (err, val) => {})
-
-			res.sendStatus(200);
-		});
+		productDao.update(product)
+			.then(row => {
+				// this.memjsClient.set(product.id, product, {expires: 60000}, (err, val) => {})
+				res.sendStatus(200);
+			})
+			.catch(err => res.status(400).send(err));
 
 		return connection.end();
 	}
@@ -117,11 +115,9 @@ class ProductsController {
 		var connection = mysql();
 		var productDao = new ProductDao(connection);
 
-		productDao.remove(productId, (err, results) => {
-			if(err) res.status(400).send(err);
-
-			res.sendStatus(204);
-		});
+		productDao.remove(productId)
+			.then(row => res.sendStatus(204))
+			.catch(err => res.status(400).send(err));
 
 		return connection.end();
 	}

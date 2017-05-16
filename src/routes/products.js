@@ -5,12 +5,12 @@ const router = express.Router();
 const productsController = new ProductsController();
 
 router.route('/')
-	.get((req, res) => productsController.getAll(req, res))
-	.post((req, res) => productsController.post(req, res));
+	.get(productsController.getAll)
+	.post(productsController.post);
 
 router.route('/:id')
-	.get((req, res) => productsController.findById(req, res))
-	.put((req, res) => productsController.put(req, res))
-	.delete((req, res) => productsController.delete(req, res));
+	.get(productsController.findById)
+	.put(productsController.put)
+	.delete(productsController.delete);
 
 export default router;
