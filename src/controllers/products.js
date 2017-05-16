@@ -1,7 +1,7 @@
 import memjs from 'memjs';
 import util from 'util';
-import mysql from '../database/';
-import { ProductDao } from '../database/dao/ProductDao';
+import mysql from '../config/database';
+import { ProductDao } from '../persistence/ProductDao';
 
 class ProductsController {
 	
