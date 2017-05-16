@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Template of a webservice in NodeJS based on documentation and in the excellent book on NodeJS by Waldemar Neto",
   "main": "index.js",
+  "engines": {
+    "node": "6.10.3"
+  },
   "scripts": {
     "start": "babel-node server-cluster.js",
     "test:integration": "NODE_ENV=test mocha --opts test/integration/mocha.opts test/integration/**/*_spec.js",
@@ -35,8 +38,6 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-preset-env": "^1.3.2",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "sinon": "^2.1.0",
@@ -49,6 +50,8 @@
     "helmet": "^3.6.0",
     "memjs": "^0.10.2",
     "morgan": "^1.8.1",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.3.2"
   }
 }
