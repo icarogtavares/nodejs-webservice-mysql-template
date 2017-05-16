@@ -5,10 +5,11 @@ import throng from 'throng';
 
 const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
-throng(app, {
+throng({
   workers: WORKERS,
-  lifetime: Infinity
-})
+  lifetime: Infinity,
+  start: app
+});
 
 
 // var cpus = os.cpus();
