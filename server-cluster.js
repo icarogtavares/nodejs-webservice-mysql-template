@@ -1,23 +1,31 @@
-import cluster  from 'cluster';
-import os from 'os';
+// import cluster  from 'cluster';
+// import os from 'os';
 import app from './server';
+import throng from 'throng';
 
-var cpus = os.cpus();
+const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
-if(cluster.isMaster){
-  cpus.forEach(function(){
-      cluster.fork();
-  });
+throng(app, {
+  workers: WORKERS,
+  lifetime: Infinity
+})
 
-  cluster.on('listening', function(worker){
-    console.log(`cluster connected ${worker.process.pid}`);
-  });
 
-  cluster.on('exit', worker => {
-    console.log(`cluster ${worker.process.pid} disconnected`);
-    cluster.fork();
-  })
+// var cpus = os.cpus();
+// if(cluster.isMaster){
+  // cpus.forEach(function(){
+  //     cluster.fork();
+  // });
 
-} else {
-  app();
-}
+  // cluster.on('listening', (worker) => {
+  //   console.log(`cluster connected ${worker.process.pid}`);
+  // });
+
+  // cluster.on('exit', worker => {
+  //   console.log(`cluster ${worker.process.pid} disconnected`);
+  //   cluster.fork();
+  // })
+// 
+// } else {
+//   app();
+// }
