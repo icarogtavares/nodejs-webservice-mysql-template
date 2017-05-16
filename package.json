@@ -7,7 +7,7 @@
     "node": "6.10.3"
   },
   "scripts": {
-    "start": "babel-node server-cluster.js",
+    "start": "WEB_CONCURRENCY=2 babel-node server-cluster.js",
     "test:integration": "NODE_ENV=test mocha --opts test/integration/mocha.opts test/integration/**/*_spec.js",
     "test:unit": "NODE_ENV=test mocha --opts test/unit/mocha.opts test/unit/**/*_spec.js",
     "test": "echo \"Error: no test specified\" && exit 1"
