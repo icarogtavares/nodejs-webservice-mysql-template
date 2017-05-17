@@ -2,7 +2,7 @@
 import util from 'util';
 import mysql from '../config/database';
 import { ProductDao } from '../persistence/ProductDao';
-import { QueryHelper } from '../persistence/query-promise';
+import queryPromise from '../persistence/query-promise';
 
 class ProductsController {
 	
@@ -15,8 +15,7 @@ class ProductsController {
 
 	getAll(req, res) {
 		const connection = mysql();
-		const queryHelper = new QueryHelper(connection);
-		const productDao = new ProductDao(queryHelper);
+		const productDao = new ProductDao(queryPromise(connection));
 
 		productDao.getAll()
 			.then(rows => res.send(rows))
@@ -31,8 +30,7 @@ class ProductsController {
 		// this.memjsClient.get(productId, (err, val) => res.send(val));
 
 		const connection = mysql();
-		const queryHelper = new QueryHelper(connection);
-		const productDao = new ProductDao(queryHelper);
+		const productDao = new ProductDao(queryPromise(connection));
 
 		productDao.findById(productId)
 			.then(row => res.send(row))
@@ -57,8 +55,7 @@ class ProductsController {
 		let product = req.body;
 
 		const connection = mysql();
-		const queryHelper = new QueryHelper(connection);
-		const productDao = new ProductDao(queryHelper);
+		const productDao = new ProductDao(queryPromise(connection));
 
 		productDao.save(product)
 			.then(row => {
@@ -101,8 +98,7 @@ class ProductsController {
 		product.id = productId;
 
 		const connection = mysql();
-		const queryHelper = new QueryHelper(connection);
-		const productDao = new ProductDao(queryHelper);
+		const productDao = new ProductDao(queryPromise(connection));
 
 		productDao.update(product)
 			.then(row => {
@@ -118,8 +114,7 @@ class ProductsController {
 		const productId = req.params.id;
 
 		const connection = mysql();
-		const queryHelper = new QueryHelper(connection);
-		const productDao = new ProductDao(queryHelper);
+		const productDao = new ProductDao(queryPromise(connection));
 
 		productDao.remove(productId)
 			.then(row => res.sendStatus(204))
