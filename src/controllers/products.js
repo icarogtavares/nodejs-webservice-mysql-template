@@ -1,7 +1,8 @@
-import memjs from 'memjs';
+// import memjs from 'memjs';
 import util from 'util';
 import mysql from '../config/database';
 import { ProductDao } from '../persistence/ProductDao';
+import { QueryHelper } from '../persistence/query-promise';
 
 class ProductsController {
 	
@@ -13,8 +14,9 @@ class ProductsController {
 	}
 
 	getAll(req, res) {
-		var connection = mysql();
-		var productDao = new ProductDao(connection);
+		const connection = mysql();
+		const queryHelper = new QueryHelper(connection);
+		const productDao = new ProductDao(queryHelper);
 
 		productDao.getAll()
 			.then(rows => res.send(rows))
@@ -24,12 +26,13 @@ class ProductsController {
 	}
 
 	findById(req, res) {
-		var productId = req.params.id;
+		const productId = req.params.id;
 
 		// this.memjsClient.get(productId, (err, val) => res.send(val));
 
-		var connection = mysql();
-		var productDao = new ProductDao(connection);
+		const connection = mysql();
+		const queryHelper = new QueryHelper(connection);
+		const productDao = new ProductDao(queryHelper);
 
 		productDao.findById(productId)
 			.then(row => res.send(row))
@@ -51,16 +54,17 @@ class ProductsController {
 		req.sanitizeBody('name').trim();
 		req.sanitizeBody('description').trim();
 
-		var product = req.body;
+		let product = req.body;
 
-		var connection = mysql();
-		var productDao = new ProductDao(connection);
+		const connection = mysql();
+		const queryHelper = new QueryHelper(connection);
+		const productDao = new ProductDao(queryHelper);
 
 		productDao.save(product)
 			.then(row => {
 				product.id = row.insertId;
 
-				var response = {
+				const response = {
 		        	'product': product,
 		          	links: [
 		            	{
@@ -91,13 +95,14 @@ class ProductsController {
 	}
 
 	put(req, res) {
-		var product = req.body
-		var productId = req.params.id;
+		let product = req.body
+		const productId = req.params.id;
 
 		product.id = productId;
 
-		var connection = mysql();
-		var productDao = new ProductDao(connection);
+		const connection = mysql();
+		const queryHelper = new QueryHelper(connection);
+		const productDao = new ProductDao(queryHelper);
 
 		productDao.update(product)
 			.then(row => {
@@ -110,10 +115,11 @@ class ProductsController {
 	}
 
 	delete(req, res) {
-		var productId = req.params.id;
+		const productId = req.params.id;
 
-		var connection = mysql();
-		var productDao = new ProductDao(connection);
+		const connection = mysql();
+		const queryHelper = new QueryHelper(connection);
+		const productDao = new ProductDao(queryHelper);
 
 		productDao.remove(productId)
 			.then(row => res.sendStatus(204))
