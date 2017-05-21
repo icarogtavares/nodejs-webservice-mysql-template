@@ -1,7 +1,7 @@
 // import memjs from 'memjs';
 import util from 'util';
 import mysql from '../config/database';
-import { ProductDao } from '../persistence/ProductDao';
+import {ProductDao} from '../persistence/ProductDao';
 import queryPromise from '../persistence/query-promise';
 
 class ProductsController {
